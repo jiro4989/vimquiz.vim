@@ -9,6 +9,9 @@ Vimの簡単クイズプラグインです。
 
 == インストール
 
+`$HOME/.vimrc` に以下の設定を付け足す。詳細は各プラグインマネージャについてググ
+ってください。
+
 * vim-plug
 ** `Plug 'jiro4989/vimquiz.vim'`
 * Vundle
