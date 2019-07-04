@@ -7,12 +7,11 @@ set cpo&vim
 " 処理概要
 " --------
 "
-" 1. バッファを3つ使う
-" 2. 上のバッファには選択式の問題が表示される
-" 3. コマンドバッファに入力し、Enterで決定する
-" 4. 正解の場合は、問題描画のバッファの下のバッファに問題タイトルとOK/NGが追記さ
+" 1. 問題と回答を表示するバッファ一つでやり取りする。
+" 2. 問題はinputで手入力式。コマンドをそのまま入力する。
+" 3. 正解の場合は、問題描画のバッファの下のバッファに問題タイトルとOK/NGが追記さ
 "    れる
-" 5. この関数の引数の値によって問題数が変動する
+" 4. この関数の引数の値によって問題数が変動する
 "
 " 引数
 " ----
@@ -57,17 +56,9 @@ function! vimquiz#start_quiz()
   endfor
 
   call s:draw_answers(3, l:ok_cnt, len(l:datas), l:results)
-
-  " 正答数を描画し、あなたのVimレベルを評価する。
-  " 入力によって、それをファイル出力できる。
-  " 出力フォーマットは以下の通り。
-  "
-  " 1. プレーンテキスト
-  " 2. CSV
-  " 3. Markdown
-  " 4. AsciiDoc
 endfunction
 
+" テキスト描画用バッファを初期化する。
 function! s:init_buffer() abort
   silent edit 'vimquiz'
   setlocal bufhidden=hide
@@ -91,12 +82,14 @@ function! s:init_buffer() abort
   hi VimQuizNG ctermfg=red guifg=red
 endfunction
 
+" カレントバッファ内のテキストのみ空にする。
 function! s:clear_buffer() abort
   for l:i in range(1, winheight('.'))
     call setline(l:i, '')
   endfor
 endfunction
 
+" 指定行数から現在の回答状況についてを描画する。
 function! s:draw_answers(start_idx, ok_cnt, q_cnt, results) abort
   " 何問中何問正解していたのかを描画
   call setline(a:start_idx, 'OK/Q : ' . a:ok_cnt . '/' . a:q_cnt)
