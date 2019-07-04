@@ -20,7 +20,7 @@ set cpo&vim
 function! vimquiz#start_quiz()
   call s:init_buffer()
 
-  let l:datas = vimquiz#data#get_datas()
+  let l:datas = vimquiz#data#get_datas(10)
 
   " 問題の数だけループし、全問回答するまでループする。
   " このとき quit と入力するとクイズの途中でも強制終了する

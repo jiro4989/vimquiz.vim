@@ -15,6 +15,16 @@ let s:datas = [
       \ ]
 
 " 引数の数値分だけランダムに問題データを返却する。
-function! vimquiz#data#get_datas() abort
-  return s:datas
+"
+" NOTE:
+" 乱数生成に関してはVimが標準で対応していないので、現在時刻を利用して適当
+" な値を取得する。現在時刻の数値からN個のデータを取得して返却する。
+function! vimquiz#data#get_datas(n) abort
+  let l:list = []
+  let l:now = localtime()
+  for l:i in range(l:now, l:now + a:n - 1)
+    let l:mod = l:i % len(s:datas)
+    call add(l:list, s:datas[l:mod])
+  endfor
+  return l:list
 endfunction
