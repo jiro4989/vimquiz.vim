@@ -1,0 +1,21 @@
+:toc: left
+:sectnums:
+
+= vimquiz.vim
+
+Vimの簡単クイズプラグインです。
+このプラグインはVimScriptの勉強目的で作成しました。
+自分の理解を整理する意図もあるため、コード内には多くメモを残しているかもしれません。
+
+== 使用例
+
+== インストール
+
+== 使い方
+
+== 参考
+
+作成に際して、以下の記事を参考にしました。
+
+* https://kasei-san.hatenadiary.org/entry/20130714/p1[VimScriptざっくりチュートリアル(バッファ編集編)]
+* https://github.com/mattn/habatobi-vim/blob/master/autoload/habatobi.vim[Vimで走り幅跳びするプラグイン]
