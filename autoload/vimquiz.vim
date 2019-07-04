@@ -21,26 +21,15 @@ set cpo&vim
 function! vimquiz#start_quiz()
   call s:init_buffer()
 
-  " " 新規バッファを生成する
-  " :5new vimquiz_q_buf
-  " :20new vimquiz_a_buf
-  " let s:q_buf_id = bufnr('vimquiz_q_buf')
-  " let s:a_buf_id = bufnr('vimquiz_a_buf')
+  let l:datas = vimquiz#data#get_datas()
 
-  let l:datas = [
-        \ {'q':'Q. ノーマルモードで左に移動する際に使用するキーを答えよ', 'a':'h'},
-        \ {'q':'Q. ノーマルモードで下に移動する際に使用するキーを答えよ', 'a':'j'},
-        \ {'q':'Q. ノーマルモードで上に移動する際に使用するキーを答えよ', 'a':'k'},
-        \ {'q':'Q. ノーマルモードで右に移動する際に使用するキーを答えよ', 'a':'l'}
-        \ ]
-
-  " 問題を問題のみ定義したファイルから読み取る。
-  " 問題の数だけループし、全部正解か不正解になったらループを終了する
+  " 問題の数だけループし、全問回答するまでループする。
   " このとき quit と入力するとクイズの途中でも強制終了する
   let l:ok_cnt = 0
   let l:results = []
   for l:data in l:datas
-    " 問題描画バッファの初期化
+    " 問題描画バッファ内のテキストを全て消す
+    call s:clear_buffer()
 
     " 問題描画バッファに問題を描画
     call setline(1, l:data['q'])
@@ -55,6 +44,11 @@ function! vimquiz#start_quiz()
     if l:ans == l:data['a']
       let l:ok_cnt += 1
       let l:ok_ng = '[OK]'
+    elseif l:ans == 'quit'
+      " 途中でも強制的にクイズを終了する
+      call s:clear_buffer()
+      call setline(1, 'Quit VimQuiz')
+      return
     else
       let l:ok_ng = '[NG]'
     endif
@@ -75,7 +69,7 @@ function! vimquiz#start_quiz()
 endfunction
 
 function! s:init_buffer() abort
-  silent edit 'vim quiz'
+  silent edit 'vimquiz'
   setlocal bufhidden=hide
   setlocal buftype=nofile
   setlocal colorcolumn=
@@ -95,6 +89,12 @@ function! s:init_buffer() abort
   hi VimQuizOK ctermfg=green guifg=green
   syn match VimQuizNG '^\[NG\].*'
   hi VimQuizNG ctermfg=red guifg=red
+endfunction
+
+function! s:clear_buffer() abort
+  for l:i in range(1, winheight('.'))
+    call setline(l:i, '')
+  endfor
 endfunction
 
 function! s:draw_answers(start_idx, ok_cnt, q_cnt, results) abort
