@@ -1,8 +1,3 @@
-" Vim plugin for description
-" Last Change: 2019/07/04
-" Maintainer:  Jiro <jiroron666@gmail.com>
-" License:     This file is placed in the public domain.
-
 if exists("g:loaded_vimquiz")
   finish
 endif
